@@ -12,8 +12,11 @@ Let's get Latttude ang Longitude from an address
   </button>
   
   <ul>
-  <li><%= @address %></li>
-  <li><%= @latitude %></li>
-  <li><%= @longitude %></li>
+    <li>Address: <%= @address %></li>
+    <li>Latitude: <%= @latitude %></li>
+    <li>Longitude: <%= @longitude %></li>
+    <li>Timezone: <%= @timezone %></li>
+    <li>Timezone Offset: <%= @timezone_offset %></li>
+    <li><%= @hourly_array %></li>
   </ul>
 </form>

@@ -15,11 +15,16 @@ class TestController < ApplicationController
     first_result = results_array.at(0)
     geometry_hash = first_result.fetch("geometry")
     location_hash = geometry_hash.fetch("location")
-    @latitude = location_hash.fetch("lat")
-    @longitude = location_hash.fetch("lng")
+    @latitude = location_hash.fetch("lat").to_s
+    @longitude = location_hash.fetch("lng").to_s
 
     # Convert Coordinates to Weather
-    url = "https://api.openweathermap.org/data/2.5/onecall?lat=39.2699&lon=-76.6073&exclude=current,minutely,daily&units=imperial&appid="
+    url = "https://api.openweathermap.org/data/2.5/onecall?lat=" + @latitude + "&lon=" + @longitude + "&exclude=current,minutely,daily&units=imperial&appid=" + ENV.fetch("OPEN_WEATHER_KEY")
+    raw_data = open(url).read
+    parsed_data = JSON.parse(raw_data)
+    @timezone = parsed_data.fetch("timezone")
+    @timezone_offset = parsed_data.fetch("timezone_offset")
+    @hourly_array = parsed_data.fetch("hourly")
 
     render({:template => "home_templates/test2.html.erb"})
   end
