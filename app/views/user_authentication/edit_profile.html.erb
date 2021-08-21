@@ -1,0 +1,40 @@
+<div >
+  <h5>
+    Edit User Account
+  </h5>
+
+  <div>
+    <form action="/modify_user" method="post">
+      <div>
+        <label for="email_box">Email</label>
+        <input id="email_box" name="query_email" value="<%= @current_user.email %>">
+      </div>
+      <div>
+        <label for="phone_number_box">Phone number</label>
+        <input id="phone_number_box" name="query_phone_number" value="<%= @current_user.phone_number %>">
+      </div>
+      <div>
+        <label for="phone_confirmed_box">Phone confirmed</label>
+        <input id="phone_confirmed_box" name="query_phone_confirmed" type="checkbox" value="1" <%= "checked" if @current_user.phone_confirmed %>>
+      </div>
+      <div>
+        <label for="mail_confirmed_box">Mail confirmed</label>
+        <input id="mail_confirmed_box" name="query_mail_confirmed" type="checkbox" value="1" <%= "checked" if @current_user.mail_confirmed %>>
+      </div>
+
+      <div>
+        <label for="password_box">Password</label>
+        <input id="password_box" name="query_password" placeholder="Choose a password..." type="password">
+      </div>
+    
+      <div>
+        <label for="password_confirmation_box">Password Confirmation</label>
+        <input id="password_confirmation_box" name="query_password_confirmation" placeholder="Confirm your password..." type="password">
+      </div>
+
+      <button>
+        Update account
+      </button>
+    </form>
+  </div>
+</div>
