@@ -1,5 +1,8 @@
 Rails.application.routes.draw do
 
+  get("/test", { :controller => "test", :action => "test" })        
+  post("/address_to_coordinates", { :controller => "test", :action => "address_to_coordinates" })        
+
   # Routes for the User account:
 
   # SIGN UP FORM
