@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>FinalProject</title>
+    <title>WeatherText</title>
     <%= csrf_meta_tags %>
 
     <!-- Expand the number of characters we can use in the document beyond basic ASCII 🎉 -->
@@ -18,10 +18,21 @@
   <body>
 
     <h1>WeatherText</h1>
-    Providing customized text notifications for the weather you care about
+    <ul>
+      <% if @current_user != nil %>
+        <li>Hi <%= @current_user.email %>!</li>
+      <% end %>
+        <li><a href = "/">Home</a></li>
+      <% if @current_user == nil %>
+        <li><a href = "/user_sign_up">Sign Up</a></li>
+        <li><a href = "/user_sign_in">Sign In</a></li>
+      <% else %>
+        <li><a href = "/edit_user_profile">Edit Account</a></li>
+        <li><a href = "/cancel_user_account">Delete Account</a></li>
+        <li><a href = "/user_sign_out">Sign Out</a></li>
+      <% end %>
+    </ul>
     <hr>
-    <a href = "/">Home</a> - <a href = "/user_sign_up">Sign Up</a> - <a href = "/edit_user_profile">Edit User</a> - <a href = "/modify_user">Modify User</a> - <a href = "/cancel_user_account">Delete User</a> - <a href = "/user_sign_in">Sign In</a> - <a href = "/user_sign_out">Sign Out</a>  
-
     <%= yield %>
   </body>
 </html>
