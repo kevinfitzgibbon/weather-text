@@ -17,6 +17,28 @@ Let's get Latttude ang Longitude from an address
     <li>Longitude: <%= @longitude %></li>
     <li>Timezone: <%= @timezone %></li>
     <li>Timezone Offset: <%= @timezone_offset %></li>
-    <li><%= @hourly_array %></li>
+    <li><%= @first_dt %></li>
+    <li><%= @first_result %></li>
   </ul>
+
+<table>
+  <tr>
+    <th>Datetime</th>
+    <th>Weather Category</th>
+    <th>Weather Description</th>
+    <th>Probability of Precipitation</th>
+  </tr>
+  <% @hourly_array.each do |hour_forecast| %>
+    <tr>
+      <td>
+        <% datetime = DateTime.strptime(hour_forecast.fetch("dt").to_s,'%s') %>
+        <%= datetime.strftime("%b %-d, %Y %-l %p %Z")  %>       
+      </td>
+      <td><%= hour_forecast.fetch("weather").first.fetch("main") %></td>
+      <td><%= hour_forecast.fetch("weather").first.fetch("description") %></td>
+      <td><%= hour_forecast.fetch("pop") %></td>
+    </tr>
+  <% end %>
+</table>
+
 </form>

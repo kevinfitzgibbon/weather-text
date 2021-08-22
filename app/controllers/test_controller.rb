@@ -25,6 +25,11 @@ class TestController < ApplicationController
     @timezone = parsed_data.fetch("timezone")
     @timezone_offset = parsed_data.fetch("timezone_offset")
     @hourly_array = parsed_data.fetch("hourly")
+    @first_result = @hourly_array.at(0)
+    @first_dt = @first_result.fetch("dt").to_s
+    require 'date'
+    @first_dt = DateTime.strptime(@first_dt,'%s')
+    @first_dt = @first_dt.strftime("%b %-d, %Y %-l%P") 
 
     render({:template => "home_templates/test2.html.erb"})
   end
