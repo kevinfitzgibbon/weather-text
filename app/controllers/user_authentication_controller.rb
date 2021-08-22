@@ -67,8 +67,7 @@ class UserAuthenticationController < ApplicationController
     @user.password = params.fetch("query_password")
     @user.password_confirmation = params.fetch("query_password_confirmation")
     @user.phone_number = params.fetch("query_phone_number")
-    @user.phone_confirmed = params.fetch("query_phone_confirmed", false)
-    @user.mail_confirmed = params.fetch("query_mail_confirmed", false)
+    @user.time_zone = params.fetch("query_time_zone").fetch("time_zone")
     
     if @user.valid?
       @user.save
