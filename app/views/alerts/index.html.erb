@@ -68,7 +68,7 @@
 
       <div>
         <label for="alert_send_time_box">
-          Alert send time
+          Alert send time (in <%= @current_user.time_zone %>)
         </label>
 
         <input type="time" id="alert_send_time_box" name="query_alert_send_time">
@@ -76,7 +76,7 @@
 
       <div>
         <label for="forecast_start_time_box">
-          Forecast start time
+          Forecast start time (in <%= @current_user.time_zone %>)
         </label>
 
         <input type="time" id="forecast_start_time_box" name="query_forecast_start_time">
@@ -84,7 +84,7 @@
 
       <div>
         <label for="forecast_end_time_box">
-          Forecast end time
+          Forecast end time (in <%= @current_user.time_zone %>)
         </label>
 
         <input type="time" id="forecast_end_time_box" name="query_forecast_end_time">
@@ -96,6 +96,10 @@
     </form>
   </div>
 </div>
+
+<%= Time.now.in_time_zone(@current_user.time_zone) %>
+<%= Time.now.in_time_zone(@current_user.time_zone).utc_offset %>
+<%= Time.now.in_time_zone(@current_user.time_zone) - Time.now.in_time_zone(@current_user.time_zone).utc_offset %>
 
 <hr>
 <div>

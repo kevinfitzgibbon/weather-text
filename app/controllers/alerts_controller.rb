@@ -30,6 +30,9 @@ class AlertsController < ApplicationController
     latitude = location_hash.fetch("lat")
     longitude = location_hash.fetch("lng")
 
+
+    require 'time'
+
     the_alert = Alert.new
     the_alert.user_id = @current_user.id
     the_alert.address = params.fetch("query_address")
@@ -46,6 +49,10 @@ class AlertsController < ApplicationController
     the_alert.alert_sent = params.fetch("query_alert_sent", false)
     the_alert.forecast_start_time = params.fetch("query_forecast_start_time")
     the_alert.forecast_end_time = params.fetch("query_forecast_end_time")
+
+    #- Time.now.in_time_zone(@current_user.time_zone).utc_offset
+    #ActiveSupport::TimeZone.new('America/New_York').local_to_utc(t)
+    #Time.zone_offset(@current_user.time_zone)
 
     if the_alert.valid?
       the_alert.save

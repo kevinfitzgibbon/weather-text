@@ -11,12 +11,13 @@
 #  Tuesday             :boolean
 #  Wednesday           :boolean
 #  address             :string
-#  alert_send_time     :time
+#  alert_send_time     :datetime
 #  alert_sent          :boolean
-#  forecast_end_time   :time
-#  forecast_start_time :time
+#  forecast_end_time   :datetime
+#  forecast_start_time :datetime
 #  latitude            :float
 #  longitude           :float
+#  time_zone           :string
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null
 #  user_id             :integer
