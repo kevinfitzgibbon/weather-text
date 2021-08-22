@@ -29,7 +29,21 @@ class TestController < ApplicationController
     @first_dt = @first_result.fetch("dt").to_s
     require 'date'
     @first_dt = DateTime.strptime(@first_dt,'%s')
-    @first_dt = @first_dt.strftime("%b %-d, %Y %-l%P") 
+    @first_dt = @first_dt.strftime("%b %-d, %Y %-l%P")
+
+    # Check to see if rain is in the forecast and record the highest PoP if it is 
+    @rain = false
+    @max_pop = 0
+    @hourly_array.each do |hourly_forecast|
+      if hourly_forecast.fetch("weather").first.fetch("main") == "Rain"
+        @rain = true
+        if hourly_forecast.fetch("pop") > @max_pop
+          @max_pop = hourly_forecast.fetch("pop")
+          @datetime_of_max_pop = 
+          DateTime.strptime(hourly_forecast.fetch("dt").to_s,'%s')
+        end
+      end
+    end
 
     render({:template => "home_templates/test2.html.erb"})
   end

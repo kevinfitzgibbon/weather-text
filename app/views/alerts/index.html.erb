@@ -1,0 +1,265 @@
+<div>
+  <div>
+    <h1>
+      List of <%= @current_user.email %>'s alerts
+    </h1>
+  </div>
+</div>
+
+<hr>
+
+<div>
+  <div>
+    <h2>
+      Add a new alert
+    </h2>
+
+    <form action="/insert_alert" method="post">
+      <div>
+        <label for="address_box">
+          Location
+        </label>
+
+        <input type="text" id="address_box" name="query_address">
+        For most accurate results, enter an exact address
+      </div>
+      
+      <div>
+        <input type="checkbox" id="Sunday_box" name="query_Sunday" value="1">
+
+        <label for="Sunday_box">Sunday</label>
+      </div>
+
+      <div>
+        <input type="checkbox" id="Monday_box" name="query_Monday" value="1">
+
+        <label for="Monday_box">Monday</label>
+      </div>
+
+      <div>
+        <input type="checkbox" id="Tuesday_box" name="query_Tuesday" value="1">
+
+        <label for="Tuesday_box">Tuesday</label>
+      </div>
+
+      <div>
+        <input type="checkbox" id="Wednesday_box" name="query_Wednesday" value="1">
+
+        <label for="Wednesday_box">Wednesday</label>
+      </div>
+
+      <div>
+        <input type="checkbox" id="Thursday_box" name="query_Thursday" value="1">
+
+        <label for="Thursday_box">Thursday</label>
+      </div>
+
+      <div>
+        <input type="checkbox" id="Friday_box" name="query_Friday" value="1">
+
+        <label for="Friday_box">Friday</label>
+      </div>
+
+      <div>
+        <input type="checkbox" id="Saturday_box" name="query_Saturday" value="1">
+
+        <label for="Saturday_box">Saturday</label>
+      </div>
+
+      <div>
+        <label for="alert_send_time_box">
+          Alert send time
+        </label>
+
+        <input type="time" id="alert_send_time_box" name="query_alert_send_time">
+      </div>
+
+      <div>
+        <label for="forecast_start_time_box">
+          Forecast start time
+        </label>
+
+        <input type="time" id="forecast_start_time_box" name="query_forecast_start_time">
+      </div>
+
+      <div>
+        <label for="forecast_end_time_box">
+          Forecast end time
+        </label>
+
+        <input type="time" id="forecast_end_time_box" name="query_forecast_end_time">
+      </div>
+
+      <button>
+        Create alert
+      </button>
+    </form>
+  </div>
+</div>
+
+<hr>
+<div>
+  <div>
+    <table>
+      <tr>
+        <th>
+          ID
+        </th>
+
+        <th>
+          User
+        </th>
+
+        <th>
+          Address
+        </th>
+
+        <th>
+          Latitude
+        </th>
+
+        <th>
+          Longitude
+        </th>
+
+        <th>
+          Sunday
+        </th>
+
+        <th>
+          Monday
+        </th>
+
+        <th>
+          Tuesday
+        </th>
+
+        <th>
+          Wednesday
+        </th>
+
+        <th>
+          Thursday
+        </th>
+
+        <th>
+          Friday
+        </th>
+
+        <th>
+          Saturday
+        </th>
+
+        <th>
+          Alert send time
+        </th>
+
+        <th>
+          Alert sent
+        </th>
+
+        <th>
+          Forecast start time
+        </th>
+
+        <th>
+          Forecast end time
+        </th>
+
+        <th>
+          Created at
+        </th>
+
+        <th>
+          Updated at
+        </th>
+
+        <th>
+        </th>
+      </tr>
+
+      <% @list_of_alerts.each do |an_alert| %>
+      <tr>
+        <td>
+          <%= an_alert.id %>
+        </td>
+
+        <td>
+          <%= an_alert.user_id %>
+        </td>
+
+        <td>
+          <%= an_alert.address %>
+        </td>
+
+        <td>
+          <%= an_alert.latitude %>
+        </td>
+
+        <td>
+          <%= an_alert.longitude %>
+        </td>
+
+        <td>
+          <%= an_alert.Sunday %>
+        </td>
+
+        <td>
+          <%= an_alert.Monday %>
+        </td>
+
+        <td>
+          <%= an_alert.Tuesday %>
+        </td>
+
+        <td>
+          <%= an_alert.Wednesday %>
+        </td>
+
+        <td>
+          <%= an_alert.Thursday %>
+        </td>
+
+        <td>
+          <%= an_alert.Friday %>
+        </td>
+
+        <td>
+          <%= an_alert.Saturday %>
+        </td>
+
+        <td>
+          <%= an_alert.alert_send_time %>
+        </td>
+
+        <td>
+          <%= an_alert.alert_sent %>
+        </td>
+
+        <td>
+          <%= an_alert.forecast_start_time %>
+        </td>
+
+        <td>
+          <%= an_alert.forecast_end_time %>
+        </td>
+
+        <td>
+          <%= time_ago_in_words(an_alert.created_at) %> ago
+        </td>
+        <td>
+          <%= time_ago_in_words(an_alert.updated_at) %> ago
+        </td>
+
+        <td>
+          <a href="/alerts/<%= an_alert.id %>">
+            Show details
+          </a>
+        </td>
+      </tr>
+      <% end %>
+    </table>
+  </div>
+</div>
+
+<hr>

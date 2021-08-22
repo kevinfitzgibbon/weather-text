@@ -1,5 +1,3 @@
-Let's get Latttude ang Longitude from an address
-
 <form action="/address_to_coordinates" method="post">
 
   <div>
@@ -21,9 +19,13 @@ Let's get Latttude ang Longitude from an address
     <li><%= @first_result %></li>
   </ul>
 
+<% if @rain %>
+  Rain is in the forecast, with up to a <%= (@max_pop*100).round(2).to_i %>% chance at <%= @datetime_of_max_pop.in_time_zone(@timezone).strftime("%-l%P")  %>.
+<% end %>
+
 <table>
   <tr>
-    <th>Datetime</th>
+    <th>Local Datetime (<%= @timezone %>) </th>
     <th>Weather Category</th>
     <th>Weather Description</th>
     <th>Probability of Precipitation</th>
@@ -32,7 +34,7 @@ Let's get Latttude ang Longitude from an address
     <tr>
       <td>
         <% datetime = DateTime.strptime(hour_forecast.fetch("dt").to_s,'%s') %>
-        <%= datetime.strftime("%b %-d, %Y %-l %p %Z")  %>       
+        <%= datetime.in_time_zone(@timezone).strftime("%b %-d, %Y %-l %p %Z")  %>       
       </td>
       <td><%= hour_forecast.fetch("weather").first.fetch("main") %></td>
       <td><%= hour_forecast.fetch("weather").first.fetch("description") %></td>

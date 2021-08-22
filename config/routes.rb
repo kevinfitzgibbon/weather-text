@@ -1,5 +1,24 @@
 Rails.application.routes.draw do
 
+  # Routes for the Alert resource:
+
+  # CREATE
+  post("/insert_alert", { :controller => "alerts", :action => "create" })
+          
+  # READ
+  get("/alerts", { :controller => "alerts", :action => "index" })
+  
+  get("/alerts/:path_id", { :controller => "alerts", :action => "show" })
+  
+  # UPDATE
+  
+  post("/modify_alert/:path_id", { :controller => "alerts", :action => "update" })
+  
+  # DELETE
+  get("/delete_alert/:path_id", { :controller => "alerts", :action => "destroy" })
+
+  #------------------------------
+
   get("/test", { :controller => "test", :action => "test" })        
   post("/address_to_coordinates", { :controller => "test", :action => "address_to_coordinates" })        
 
