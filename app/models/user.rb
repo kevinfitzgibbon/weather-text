@@ -8,6 +8,7 @@
 #  password_digest :string
 #  phone_confirmed :boolean
 #  phone_number    :string
+#  time_zone       :string
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
 #
