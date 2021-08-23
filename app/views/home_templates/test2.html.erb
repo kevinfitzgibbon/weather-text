@@ -21,6 +21,8 @@
 
 <% if @rain %>
   Rain is in the forecast, with up to a <%= (@max_pop*100).round(2).to_i %>% chance at <%= @datetime_of_max_pop.in_time_zone(@timezone).strftime("%-l%P")  %>.
+<% else %>
+  No rain today!
 <% end %>
 
 <table>
