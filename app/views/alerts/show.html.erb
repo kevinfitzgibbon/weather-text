@@ -152,35 +152,11 @@
 
     <form action="/modify_alert/<%= @the_alert.id %>"  method="post" >
       <div>
-        <label for="user_id_box">
-          User
-        </label>
-
-        <input type="text" id="user_id_box" name="query_user_id" value="<%= @the_alert.user_id %>">
-      </div>
-
-      <div>
         <label for="address_box">
           Address
         </label>
 
         <input type="text" id="address_box" name="query_address" value="<%= @the_alert.address %>">
-      </div>
-
-      <div>
-        <label for="latitude_box">
-          Latitude
-        </label>
-
-        <input type="text" id="latitude_box" name="query_latitude" value="<%= @the_alert.latitude %>">
-      </div>
-
-      <div>
-        <label for="longitude_box">
-          Longitude
-        </label>
-
-        <input type="text" id="longitude_box" name="query_longitude" value="<%= @the_alert.longitude %>">
       </div>
 
       <div>
@@ -244,15 +220,7 @@
           Alert send time
         </label>
 
-        <input type="time" id="alert_send_time_box" name="query_alert_send_time" value="<%= @the_alert.alert_send_time %>">
-      </div>
-
-      <div>
-        <input type="checkbox" id="alert_sent_box" name="query_alert_sent" value="1" <%= "checked" if @the_alert.alert_sent %>>
-
-        <label for="alert_sent_box">
-            Alert sent
-        </label>
+        <input type="time" id="alert_send_time_box" name="query_alert_send_time" value="<%= @the_alert.alert_send_time.strftime("%H:%M")  %>">
       </div>
 
       <div>
@@ -260,7 +228,7 @@
           Forecast start time
         </label>
 
-        <input type="time" id="forecast_start_time_box" name="query_forecast_start_time" value="<%= @the_alert.forecast_start_time %>">
+        <input type="time" id="forecast_start_time_box" name="query_forecast_start_time" value="<%= @the_alert.forecast_start_time.strftime("%H:%M")  %>">
       </div>
 
       <div>
@@ -268,7 +236,7 @@
           Forecast end time
         </label>
 
-        <input type="time" id="forecast_end_time_box" name="query_forecast_end_time" value="<%= @the_alert.forecast_end_time %>">
+        <input type="time" id="forecast_end_time_box" name="query_forecast_end_time" value="<%= @the_alert.forecast_end_time.strftime("%H:%M")  %>">
       </div>
 
       <button>

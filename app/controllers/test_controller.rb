@@ -1,6 +1,75 @@
 class TestController < ApplicationController
 
   def test
+
+    # Test for finding the next send data and forceast start and end
+    require('time')
+    send_date = "2021-08-22 21:00:00 -0400"
+    forecast_start_date = "2021-08-22 12:12:00 -0400"
+    forecast_end_date = "2021-08-22 00:00:00 -0400"
+    sunday = false
+    monday = false
+    tuesday = false
+    wednesday = false
+    thursday = false
+    friday = false
+    saturday = true
+
+    # Parsing into Time with Zone so that daylight savings won't affect the time
+    send_date = ActiveSupport::TimeZone[@current_user.time_zone].parse(send_date)
+
+    # if the send date has passed, set it to today at the same time
+    if send_date - DateTime.current < 0
+      send_date = DateTime.current.midnight + (send_date - send_date.midnight).seconds
+      # if it's today and already passed, move it to tomorrow
+      if send_date - DateTime.current < 0
+        send_date = send_date + 1.day
+      end
+    end
+    send_date_weekday = send_date.strftime('%A')
+
+
+    # Check if that date is in the schedule
+    found_the_next_send_date = false
+    while found_the_next_send_date == false
+      if (send_date_weekday == "Sunday" && sunday == true) || (send_date_weekday == "Monday" && monday == true) || (send_date_weekday == "Tuesday" && tuesday == true) || (send_date_weekday == "Wednesday" && wednesday == true) || (send_date_weekday == "Thursday" && thursday == true) || (send_date_weekday == "Friday" && friday == true) || (send_date_weekday == "Saturday" && saturday == true)
+        found_the_next_send_date = true
+      else
+        send_date = send_date + 1.day
+        send_date_weekday = send_date.strftime('%A')
+      end
+    end
+
+    # The forecast start time will be the next time match after or equal to the send time
+    # Parsing into Time with Zone so that daylight savings won't affect the time
+    forecast_start_date = ActiveSupport::TimeZone[@current_user.time_zone].parse(forecast_start_date)
+
+    # if the forecast start is over a day past the send date, back it up
+    while forecast_start_date - send_date >= 60*60*24
+      forecast_start_date = forecast_start_date - 1.day
+    end
+
+    # if the forecast start is before the send date, move it forward
+    while forecast_start_date - send_date < 0 # Equal to 0 is ok
+      forecast_start_date = forecast_start_date + 1.day
+    end
+
+    # The forecast end time will be the next time match after or equal to the start time
+    # Parsing into Time with Zone so that daylight savings won't affect the time
+    forecast_end_date = ActiveSupport::TimeZone[@current_user.time_zone].parse(forecast_end_date)
+
+    # if the forecast end is over a day past the start date, back it up
+    while forecast_end_date - forecast_start_date >= 60*60*24
+      forecast_end_date = forecast_end_date - 1.day
+    end
+
+    # if the forecast end is before the start date, move it forward
+    while forecast_end_date - forecast_start_date < 0 # Equal to 0 is ok
+      forecast_end_date = forecast_end_date + 1.day
+    end
+
+    @result = send_date
+
     render({:template => "home_templates/test.html.erb"})
   end
 
