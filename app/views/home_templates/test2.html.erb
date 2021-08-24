@@ -2,17 +2,17 @@
 
   <div>
     <label for="address_box">Address</label>
-    <input id="address_box" name="query_address" placeholder="Enter an address" type="text" value="1509 Covington St, Baltimore, MD">
+    <input id="address_box" name="query_address" placeholder="Enter an address" type="text" value=<%= @address.to_s %>>
   </div>
 
   <div>
     <label for="forecast_start_box">Forecast Start</label>
-    <input id="forecast_start_box" name="query_forecast_start_time" type="datetime" value="2021-8-24 08:30">
+    <input id="forecast_start_box" name="query_forecast_start_time" type="datetime" value=<%= @forecast_start_time.to_s %>>
   </div>
 
   <div>
     <label for="forecast_end_box">Forecast End</label>
-    <input id="forecast_end_box" name="query_forecast_end_time" type="datetime" value="2021-8-24 16:30">
+    <input id="forecast_end_box" name="query_forecast_end_time" type="datetime" value=<%= @forecast_end_time.to_s %>>
   </div>
 
   <button>
@@ -36,6 +36,8 @@
 <% else %>
   No rain is in the forecast.
 <% end %>
+
+<%= @message_to_send%>
 
 <table>
   <tr>

@@ -33,12 +33,12 @@ class TestController < ApplicationController
 
 
     # Determine start time of forecast
-    @forecast_start = params.fetch("query_forecast_start_time")
-    @forecast_end = params.fetch("query_forecast_end_time")
+    @forecast_start_time = params.fetch("query_forecast_start_time")
+    @forecast_end_time = params.fetch("query_forecast_end_time")
 
     # Put into DateTime with Zone
-    @forecast_start = ActiveSupport::TimeZone[@current_user.time_zone].parse(@forecast_start)
-    @forecast_end = ActiveSupport::TimeZone[@current_user.time_zone].parse(@forecast_end)
+    @forecast_start = ActiveSupport::TimeZone[@current_user.time_zone].parse(@forecast_start_time)
+    @forecast_end = ActiveSupport::TimeZone[@current_user.time_zone].parse(@forecast_end_time)
 
     # Move start and end back to nearest hour
     @forecast_start = @forecast_start - @forecast_start.sec - 60 * @forecast_start.min
@@ -47,9 +47,6 @@ class TestController < ApplicationController
     # Move start and end back to nearest hour
     @forecast_start = @forecast_start - @forecast_start.sec - 60 * @forecast_start.min
     @forecast_end = @forecast_end - @forecast_end.sec - 60 * @forecast_end.min
-
-    # Round start time up and end time down to nearest hour
-
 
     # Check to see if rain is in the forecast and record the highest PoP if it is 
     @rain = false
@@ -69,26 +66,61 @@ class TestController < ApplicationController
       end
     end
 
+    # Create the message to send if rain is in the forecast
+    if @rain
+      @message_to_send = "Rain is in the forecast, with up to a " + (@max_pop*100).round(2).to_i.to_s + "% chance by " + @datetime_of_max_pop.in_time_zone(@current_user.time_zone).strftime("%-l%P %Z ")   
+      if @datetime_of_max_pop.in_time_zone(@current_user.time_zone).to_date == Date.current 
+        @message_to_send = @message_to_send + "today."
+      elsif @datetime_of_max_pop.in_time_zone(@current_user.time_zone).to_date == Date.current + 1.day
+        @message_to_send = @message_to_send + "tomorrow."
+      else
+        @message_to_send = @message_to_send + @datetime_of_max_pop.in_time_zone(@current_user.time_zone).strftime("%A").to_s + "."
+      end
+    
+
+      # Then send the message
+      # Retrieve your credentials from secure storage
+      twilio_sid = ENV.fetch("TWILIO_ACCOUNT_SID")
+      twilio_token = ENV.fetch("TWILIO_AUTH_TOKEN")
+      twilio_sending_number = ENV.fetch("TWILIO_SENDING_PHONE_NUMBER")
+
+      # Create an instance of the Twilio Client and authenticate with your API key
+      twilio_client = Twilio::REST::Client.new(twilio_sid, twilio_token)
+
+      # Craft your SMS as a Hash with three keys
+      sms_parameters = {
+        :from => twilio_sending_number,
+        :to => @current_user.phone_number, # Put your own phone number here if you want to see it in action
+        :body => @message_to_send
+      }
+
+      # Send your SMS!
+      twilio_client.api.account.messages.create(sms_parameters)
+    end
+
     render({:template => "home_templates/test2.html.erb"})
   end
 
   def text
-    # Download the twilio-ruby library from twilio.com/docs/libraries/ruby
-    require 'twilio-ruby'
+    # Retrieve your credentials from secure storage
+    twilio_sid = ENV.fetch("TWILIO_ACCOUNT_SID")
+    twilio_token = ENV.fetch("TWILIO_AUTH_TOKEN")
+    twilio_sending_number = ENV.fetch("TWILIO_SENDING_PHONE_NUMBER")
 
-    # To set up environmental variables, see http://twil.io/secure
-    account_sid = ENV['TWILIO_ACCOUNT_SID']
-    auth_token = 'ca40cb8e7f25fda5b5204feb0837fec1'
-    client = Twilio::REST::Client.new(account_sid, auth_token)
+    # Create an instance of the Twilio Client and authenticate with your API key
+    twilio_client = Twilio::REST::Client.new(twilio_sid, twilio_token)
 
-    from = '+16672131068' # Your Twilio number
-    to = '+3143223136' # Your mobile phone number
+    # Craft your SMS as a Hash with three keys
+    sms_parameters = {
+      :from => twilio_sending_number,
+      :to => @current_user.phone_number, # Put your own phone number here if you want to see it in action
+      :body => "It's going to rain today — take an umbrella!"
+    }
 
-    client.messages.create(
-    from: from,
-    to: to,
-    body: "Hey friend!"
-    )
+    # Send your SMS!
+    twilio_client.api.account.messages.create(sms_parameters)
+
+    render({:template => "home_templates/test.html.erb"})
   end
 
 end

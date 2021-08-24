@@ -19,8 +19,9 @@ Rails.application.routes.draw do
 
   #------------------------------
 
-  get("/test", { :controller => "test", :action => "test" })        
-  post("/address_to_coordinates", { :controller => "test", :action => "address_to_coordinates" })        
+  get("/test", { :controller => "test", :action => "test" })
+  post("/address_to_coordinates", { :controller => "test", :action => "address_to_coordinates" })
+  post("/text", { :controller => "test", :action => "text" })
 
   # Routes for the User account:
 
