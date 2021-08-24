@@ -1,8 +1,18 @@
 <form action="/address_to_coordinates" method="post">
 
-  <div>
+ <div>
     <label for="address_box">Address</label>
-    <input id="address_box" name="query_address" placeholder="Enter an address" type="text">
+    <input id="address_box" name="query_address" placeholder="Enter an address" type="text" value="1509 Covington St, Baltimore, MD">
+  </div>
+
+  <div>
+    <label for="forecast_start_box">Forecast Start</label>
+    <input id="forecast_start_box" name="query_forecast_start_time" type="datetime" value="2021-8-24 08:30 Eastern">
+  </div>
+
+  <div>
+    <label for="forecast_end_box">Forecast End</label>
+    <input id="forecast_end_box" name="query_forecast_end_time" type="datetime" value="2021-8-24 16:30 Eastern">
   </div>
 
   <button>

@@ -1,3 +1,4 @@
+
 class AlertsController < ApplicationController
   def index
     matching_alerts = Alert.all

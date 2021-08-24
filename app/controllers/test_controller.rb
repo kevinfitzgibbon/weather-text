@@ -31,20 +31,64 @@ class TestController < ApplicationController
     @first_dt = DateTime.strptime(@first_dt,'%s')
     @first_dt = @first_dt.strftime("%b %-d, %Y %-l%P")
 
+
+    # Determine start time of forecast
+    @forecast_start = params.fetch("query_forecast_start_time")
+    @forecast_end = params.fetch("query_forecast_end_time")
+
+    # Put into DateTime with Zone
+    @forecast_start = ActiveSupport::TimeZone[@current_user.time_zone].parse(@forecast_start)
+    @forecast_end = ActiveSupport::TimeZone[@current_user.time_zone].parse(@forecast_end)
+
+    # Move start and end back to nearest hour
+    @forecast_start = @forecast_start - @forecast_start.sec - 60 * @forecast_start.min
+    @forecast_end = @forecast_end - @forecast_end.sec - 60 * @forecast_end.min
+
+    # Move start and end back to nearest hour
+    @forecast_start = @forecast_start - @forecast_start.sec - 60 * @forecast_start.min
+    @forecast_end = @forecast_end - @forecast_end.sec - 60 * @forecast_end.min
+
+    # Round start time up and end time down to nearest hour
+
+
     # Check to see if rain is in the forecast and record the highest PoP if it is 
     @rain = false
     @max_pop = 0
+    @results_array = Array.new
     @hourly_array.each do |hourly_forecast|
-      if hourly_forecast.fetch("weather").first.fetch("main") == "Rain"
-        @rain = true
-        if hourly_forecast.fetch("pop") > @max_pop
-          @max_pop = hourly_forecast.fetch("pop")
-          @datetime_of_max_pop = DateTime.strptime(hourly_forecast.fetch("dt").to_s,'%s')
+      forecast_hour = DateTime.strptime(hourly_forecast.fetch("dt").to_s,'%s')
+      if forecast_hour >= @forecast_start && forecast_hour <= @forecast_end
+        @results_array.push(hourly_forecast)
+        if hourly_forecast.fetch("weather").first.fetch("main") == "Rain"
+          @rain = true
+          if hourly_forecast.fetch("pop") > @max_pop
+            @max_pop = hourly_forecast.fetch("pop")
+            @datetime_of_max_pop = DateTime.strptime(hourly_forecast.fetch("dt").to_s,'%s')
+          end
         end
       end
     end
 
     render({:template => "home_templates/test2.html.erb"})
+  end
+
+  def text
+    # Download the twilio-ruby library from twilio.com/docs/libraries/ruby
+    require 'twilio-ruby'
+
+    # To set up environmental variables, see http://twil.io/secure
+    account_sid = ENV['TWILIO_ACCOUNT_SID']
+    auth_token = 'ca40cb8e7f25fda5b5204feb0837fec1'
+    client = Twilio::REST::Client.new(account_sid, auth_token)
+
+    from = '+16672131068' # Your Twilio number
+    to = '+3143223136' # Your mobile phone number
+
+    client.messages.create(
+    from: from,
+    to: to,
+    body: "Hey friend!"
+    )
   end
 
 end

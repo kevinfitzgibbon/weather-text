@@ -2,41 +2,53 @@
 
   <div>
     <label for="address_box">Address</label>
-    <input id="address_box" name="query_address" placeholder="Enter an address" type="text">
+    <input id="address_box" name="query_address" placeholder="Enter an address" type="text" value="1509 Covington St, Baltimore, MD">
+  </div>
+
+  <div>
+    <label for="forecast_start_box">Forecast Start</label>
+    <input id="forecast_start_box" name="query_forecast_start_time" type="datetime" value="2021-8-24 08:30">
+  </div>
+
+  <div>
+    <label for="forecast_end_box">Forecast End</label>
+    <input id="forecast_end_box" name="query_forecast_end_time" type="datetime" value="2021-8-24 16:30">
   </div>
 
   <button>
     Look it up!
   </button>
-  
-  <ul>
-    <li>Address: <%= @address %></li>
-    <li>Latitude: <%= @latitude %></li>
-    <li>Longitude: <%= @longitude %></li>
-    <li>Timezone: <%= @timezone %></li>
-    <li>Timezone Offset: <%= @timezone_offset %></li>
-    <li><%= @first_dt %></li>
-    <li><%= @first_result %></li>
-  </ul>
+
+</form>
 
 <% if @rain %>
-  Rain is in the forecast, with up to a <%= (@max_pop*100).round(2).to_i %>% chance at <%= @datetime_of_max_pop.in_time_zone(@timezone).strftime("%-l%P")  %>.
+  Rain is in the forecast, with up to a 
+  <%= (@max_pop*100).round(2).to_i %>
+  % chance by 
+  <%= @datetime_of_max_pop.in_time_zone(@current_user.time_zone).strftime("%-l%P %Z")  %> 
+  <% if @datetime_of_max_pop.in_time_zone(@current_user.time_zone).to_date == Date.current %> 
+    today.
+  <% elsif @datetime_of_max_pop.in_time_zone(@current_user.time_zone).to_date == Date.current + 1.day %> 
+    tomorrow.
+  <% else %>
+    <%= @datetime_of_max_pop.in_time_zone(@current_user.time_zone).strftime("%A") %>.
+  <% end %>
 <% else %>
-  No rain today!
+  No rain is in the forecast.
 <% end %>
 
 <table>
   <tr>
-    <th>Local Datetime (<%= @timezone %>) </th>
+    <th>Datetime</th>
     <th>Weather Category</th>
     <th>Weather Description</th>
     <th>Probability of Precipitation</th>
   </tr>
-  <% @hourly_array.each do |hour_forecast| %>
+  <% @results_array.each do |hour_forecast| %>
     <tr>
       <td>
         <% datetime = DateTime.strptime(hour_forecast.fetch("dt").to_s,'%s') %>
-        <%= datetime.in_time_zone(@timezone).strftime("%b %-d, %Y %-l %p %Z")  %>       
+        <%= datetime.in_time_zone(@current_user.time_zone).strftime("%b %-d, %Y %-l %p %Z")  %>       
       </td>
       <td><%= hour_forecast.fetch("weather").first.fetch("main") %></td>
       <td><%= hour_forecast.fetch("weather").first.fetch("description") %></td>
@@ -44,5 +56,3 @@
     </tr>
   <% end %>
 </table>
-
-</form>
