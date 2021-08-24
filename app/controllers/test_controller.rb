@@ -44,10 +44,6 @@ class TestController < ApplicationController
     @forecast_start = @forecast_start - @forecast_start.sec - 60 * @forecast_start.min
     @forecast_end = @forecast_end - @forecast_end.sec - 60 * @forecast_end.min
 
-    # Move start and end back to nearest hour
-    @forecast_start = @forecast_start - @forecast_start.sec - 60 * @forecast_start.min
-    @forecast_end = @forecast_end - @forecast_end.sec - 60 * @forecast_end.min
-
     # Check to see if rain is in the forecast and record the highest PoP if it is 
     @rain = false
     @max_pop = 0
