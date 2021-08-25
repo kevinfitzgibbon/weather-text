@@ -11,6 +11,7 @@ class Forecast
     # Will return true if rain is in the forecast
 
     rain = false
+    self.rain_max_pop = 0
     self.forecast.each do |hourly_forecast|
       if hourly_forecast.fetch("weather").first.fetch("main") == "Rain"
         rain = true

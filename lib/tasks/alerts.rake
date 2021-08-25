@@ -7,28 +7,22 @@ task({ :send_alerts => :environment }) do
     
     # Check for rain
     if filtered_forecast.rain?
-      # Send the message!
+
+      # Create the message text
+      message = Message.new(alert, filtered_forecast)
+
+      # Send the message to the user
+      message.send_text
     end
 
-    # Create and send the message if it needs one using phone number
-    # p alert.user.phone_number
+    # Mark the message as complete
+    alert.alert_sent = true
 
-    # # Mark the alert as sent
-    # p alert.alert_sent
+    # Update to the next send and forecast times
+    alert.update_to_next_alert_time # alert_sent is changed to false here
 
-    # # Calculate when the new alert time, forecast times
-    # p alert.alert_send_time
-    # p alert.Sunday
-    # p alert.Monday
-    # p alert.Tuesday
-    # p alert.Wednesday
-    # p alert.Thursday
-    # p alert.Friday
-    # # p alert.Saturday
-    # p alert.forecast_start_time
-    # p alert.forecast_end_time
-
-    # # Mark the alert as not sent again
-    # p alert.alert_sent
+    if alert.valid?
+      alert.save
+    end
   end
 end
