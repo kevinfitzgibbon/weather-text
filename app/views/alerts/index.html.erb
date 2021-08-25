@@ -103,67 +103,23 @@
     <table>
       <tr>
         <th>
-          ID
-        </th>
-
-        <th>
-          User
-        </th>
-
-        <th>
           Address
         </th>
 
         <th>
-          Latitude
+          Days
         </th>
 
         <th>
-          Longitude
+          Alert Send Time
         </th>
 
         <th>
-          Sunday
+          Forecast Start Time
         </th>
 
         <th>
-          Monday
-        </th>
-
-        <th>
-          Tuesday
-        </th>
-
-        <th>
-          Wednesday
-        </th>
-
-        <th>
-          Thursday
-        </th>
-
-        <th>
-          Friday
-        </th>
-
-        <th>
-          Saturday
-        </th>
-
-        <th>
-          Alert send time
-        </th>
-
-        <th>
-          Alert sent
-        </th>
-
-        <th>
-          Forecast start time
-        </th>
-
-        <th>
-          Forecast end time
+          Forecast End Time
         </th>
 
         <th>
@@ -181,67 +137,51 @@
       <% @list_of_alerts.each do |an_alert| %>
       <tr>
         <td>
-          <%= an_alert.id %>
-        </td>
-
-        <td>
-          <%= an_alert.user_id %>
-        </td>
-
-        <td>
           <%= an_alert.address %>
         </td>
 
         <td>
-          <%= an_alert.latitude %>
+        
+          <% if an_alert.Sunday %>
+            Sunday, 
+          <% end %>
+        
+          <% if an_alert.Monday %>
+            Monday, 
+          <% end %>
+        
+          <% if an_alert.Tuesday %>
+            Tuesday, 
+          <% end %>
+        
+          <% if an_alert.Wednesday %>
+            Wednesday, 
+          <% end %>
+        
+          <% if an_alert.Thursday %>
+            Thursday, 
+          <% end %>
+        
+          <% if an_alert.Friday %>
+            Friday, 
+          <% end %>
+        
+          <% if an_alert.Saturday %>
+            Saturday
+          <% end %>
+
         </td>
 
         <td>
-          <%= an_alert.longitude %>
+          <%= an_alert.alert_send_time.in_time_zone(@current_user.time_zone).strftime(" %l:%M %p %Z")  %>
         </td>
 
         <td>
-          <%= an_alert.Sunday %>
+          <%= an_alert.forecast_start_time.in_time_zone(@current_user.time_zone).strftime(" %l:%M %p %Z") %>
         </td>
 
         <td>
-          <%= an_alert.Monday %>
-        </td>
-
-        <td>
-          <%= an_alert.Tuesday %>
-        </td>
-
-        <td>
-          <%= an_alert.Wednesday %>
-        </td>
-
-        <td>
-          <%= an_alert.Thursday %>
-        </td>
-
-        <td>
-          <%= an_alert.Friday %>
-        </td>
-
-        <td>
-          <%= an_alert.Saturday %>
-        </td>
-
-        <td>
-          <%= an_alert.alert_send_time %>
-        </td>
-
-        <td>
-          <%= an_alert.alert_sent %>
-        </td>
-
-        <td>
-          <%= an_alert.forecast_start_time %>
-        </td>
-
-        <td>
-          <%= an_alert.forecast_end_time %>
+          <%= an_alert.forecast_end_time.in_time_zone(@current_user.time_zone).strftime(" %l:%M %p %Z") %>
         </td>
 
         <td>

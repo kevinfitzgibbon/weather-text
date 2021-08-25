@@ -1,7 +1,7 @@
 <div>
   <div>
     <h1>
-      Alert #<%= @the_alert.id %> details
+      <%= @the_alert.address %> Alert Details
     </h1>
 
     <div>
@@ -19,12 +19,6 @@
     </div>
 
     <dl>
-      <dt>
-        User
-      </dt>
-      <dd>
-        <%= @the_alert.user_id %>
-      </dd>
 
       <dt>
         Address
@@ -48,80 +42,57 @@
       </dd>
 
       <dt>
-        Sunday
+        Days
       </dt>
-      <dd>
-        <%= @the_alert.Sunday %>
-      </dd>
-
-      <dt>
-        Monday
-      </dt>
-      <dd>
-        <%= @the_alert.Monday %>
-      </dd>
-
-      <dt>
-        Tuesday
-      </dt>
-      <dd>
-        <%= @the_alert.Tuesday %>
-      </dd>
-
-      <dt>
-        Wednesday
-      </dt>
-      <dd>
-        <%= @the_alert.Wednesday %>
-      </dd>
-
-      <dt>
-        Thursday
-      </dt>
-      <dd>
-        <%= @the_alert.Thursday %>
-      </dd>
-
-      <dt>
-        Friday
-      </dt>
-      <dd>
-        <%= @the_alert.Friday %>
-      </dd>
-
-      <dt>
-        Saturday
-      </dt>
-      <dd>
-        <%= @the_alert.Saturday %>
+      <dd>        
+        <% if @the_alert.Sunday %>
+          Sunday, 
+        <% end %>
+      
+        <% if @the_alert.Monday %>
+          Monday, 
+        <% end %>
+      
+        <% if @the_alert.Tuesday %>
+          Tuesday, 
+        <% end %>
+      
+        <% if @the_alert.Wednesday %>
+          Wednesday, 
+        <% end %>
+      
+        <% if @the_alert.Thursday %>
+          Thursday, 
+        <% end %>
+      
+        <% if @the_alert.Friday %>
+          Friday, 
+        <% end %>
+      
+        <% if @the_alert.Saturday %>
+          Saturday
+        <% end %>
       </dd>
 
       <dt>
         Alert send time
       </dt>
       <dd>
-        <%= @the_alert.alert_send_time %>
-      </dd>
-
-      <dt>
-        Alert sent
-      </dt>
-      <dd>
-        <%= @the_alert.alert_sent %>
+        <%= @the_alert.alert_send_time.in_time_zone(@current_user.time_zone).strftime(" %l:%M %p %Z") %>
       </dd>
 
       <dt>
         Forecast start time
       </dt>
       <dd>
-        <%= @the_alert.forecast_start_time %>
+        <%= @the_alert.forecast_start_time.in_time_zone(@current_user.time_zone).strftime(" %l:%M %p %Z") %>
       </dd>
 
       <dt>
         Forecast end time
       </dt>
       <dd>
-        <%= @the_alert.forecast_end_time %>
+        <%= @the_alert.forecast_end_time.in_time_zone(@current_user.time_zone).strftime(" %l:%M %p %Z") %>
       </dd>
 
       <dt>

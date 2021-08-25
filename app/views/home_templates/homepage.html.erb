@@ -1,5 +1,5 @@
 <% if @current_user == nil %>
   Hello! Please Sign In or Sign Up to continue
 <% else %>
-  <a href="/test">Testing</a>
+  Hello <%= @current_user.email %>!
 <% end %>

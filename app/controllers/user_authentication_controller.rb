@@ -79,6 +79,11 @@ class UserAuthenticationController < ApplicationController
   end
 
   def destroy
+    # First, delete all the user's alerts
+    Alert.where({ :user_id => @current_user.id }).each do |alert|
+      alert.destroy
+    end
+
     @current_user.destroy
     reset_session
     
