@@ -1,9 +1,10 @@
 task({ :send_alerts => :environment }) do
-  Alert.where("alert_send_time < ?",Time.current).where.not({:alert_sent => false}).each do |alert|
+  Alert.where("alert_send_time < ?",Time.current).each do |alert|
     # These alerts have not been sent, but need to be
 
     # Get weather from coordinates and forecast times
     filtered_forecast = alert.filtered_hourly_forecast 
+    p "test"
     
     # Check for rain
     if filtered_forecast.rain?
