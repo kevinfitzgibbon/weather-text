@@ -2,7 +2,7 @@
 <html>
 <head>
   <title>
-    FinalProject
+    WeatherTexter
   </title>
 
   <!-- Expand the number of characters we can use in the document beyond basic ASCII 🎉 -->
@@ -30,20 +30,6 @@
 
 <body>
   <%= render "shared/navbar" %>
-  <div class="container">
-    <ul>
-      <% if @current_user != nil %>
-        <li>Hi <%= @current_user.email %>!</li>
-        <li><a href = "/edit_user_profile">Edit Account</a></li>
-        <li><a href = "/cancel_user_account">Delete Account</a></li>
-        <li><a href = "/user_sign_out">Sign Out</a></li>
-      <% else %>
-        <li><a href = "/user_sign_up">Sign Up</a></li>
-        <li><a href = "/user_sign_in">Sign In</a></li>
-      <% end %>
-    </ul>
-    <hr>
-  </div>
   <div class="container">
     <%= render "shared/flashes" %>
 

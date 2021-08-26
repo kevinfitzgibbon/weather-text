@@ -17,83 +17,95 @@
     <form action="/insert_alert" method="post">
       <div>
         <label for="address_box">
-          Location
+          <b>Location: </b>
         </label>
 
-        <input type="text" id="address_box" name="query_address">
-        For most accurate results, enter an exact address
+        <input type="text" id="address_box" name="query_address" required>
+        <i>For most accurate results, enter an exact address</i>
       </div>
-      
+
       <div>
+        <label for="alert_send_time_box">
+          <b>Alert Time:</b>
+        </label>
+
+        <input type="time" id="alert_send_time_box" name="query_alert_send_time" required>
+        <i>(in <%= @current_user.time_zone %>)</i>
+      </div>
+
+
+      <b>Alert Days:</b>
+      <div class="form-check form-check-inline">
         <input type="checkbox" id="Sunday_box" name="query_Sunday" value="1">
 
         <label for="Sunday_box">Sunday</label>
       </div>
 
-      <div>
+      <div class="form-check form-check-inline">
         <input type="checkbox" id="Monday_box" name="query_Monday" value="1">
 
         <label for="Monday_box">Monday</label>
       </div>
 
-      <div>
+      <div class="form-check form-check-inline">
         <input type="checkbox" id="Tuesday_box" name="query_Tuesday" value="1">
 
         <label for="Tuesday_box">Tuesday</label>
       </div>
 
-      <div>
+      <div class="form-check form-check-inline">
         <input type="checkbox" id="Wednesday_box" name="query_Wednesday" value="1">
 
         <label for="Wednesday_box">Wednesday</label>
       </div>
 
-      <div>
+      <div class="form-check form-check-inline">
         <input type="checkbox" id="Thursday_box" name="query_Thursday" value="1">
 
         <label for="Thursday_box">Thursday</label>
       </div>
 
-      <div>
+      <div class="form-check form-check-inline">
         <input type="checkbox" id="Friday_box" name="query_Friday" value="1">
 
         <label for="Friday_box">Friday</label>
       </div>
 
-      <div>
+      <div class="form-check form-check-inline">
         <input type="checkbox" id="Saturday_box" name="query_Saturday" value="1">
 
         <label for="Saturday_box">Saturday</label>
       </div>
 
       <div>
-        <label for="alert_send_time_box">
-          Alert send time (in <%= @current_user.time_zone %>)
-        </label>
-
-        <input type="time" id="alert_send_time_box" name="query_alert_send_time">
-      </div>
-
-      <div>
         <label for="forecast_start_time_box">
-          Forecast start time (in <%= @current_user.time_zone %>)
+          <b>Forecast Time:</b> from
         </label>
 
-        <input type="time" id="forecast_start_time_box" name="query_forecast_start_time">
+        <input type="time" id="forecast_start_time_box" name="query_forecast_start_time" required>
+
+               <label for="forecast_end_time_box">
+          to
+        </label>
+
+        <input type="time" id="forecast_end_time_box" name="query_forecast_end_time" required>
+        <i>(in <%= @current_user.time_zone %>)</i>
       </div>
 
       <div>
-        <label for="forecast_end_time_box">
-          Forecast end time (in <%= @current_user.time_zone %>)
-        </label>
-
-        <input type="time" id="forecast_end_time_box" name="query_forecast_end_time">
+ 
       </div>
-
       <button>
         Create alert
       </button>
     </form>
+      <div>
+        <p>You will receive a text notification at <b><%= @current_user.phone_number %></b> at the <b>Alert Time</b> on the <b>Alert Days</b> if the weather forecast for the <b>Location</b> calls for rain during the <b>Forecast Time</b> period.
+        <p>All times are in <b><%= @current_user.time_zone %></b>, based on your profile preferences.
+        <p>If the <b>Alert Time</b> is before the <b>Forecast Start Time</b>, then the <b>Forecast Start Time</b> is on the following day.
+        <p>If the <b>Forecast Start Time</b> is before the <b>Forecast End Time</b>, then the <b>Forecast End Time</b> is on the following day. 
+      </div>
+
   </div>
 </div>
 
@@ -143,31 +155,31 @@
         <td>
         
           <% if an_alert.Sunday %>
-            Sunday, 
+            Sun
           <% end %>
         
           <% if an_alert.Monday %>
-            Monday, 
+            Mon
           <% end %>
         
           <% if an_alert.Tuesday %>
-            Tuesday, 
+            Tue
           <% end %>
         
           <% if an_alert.Wednesday %>
-            Wednesday, 
+            Wed
           <% end %>
         
           <% if an_alert.Thursday %>
-            Thursday, 
+            Thu
           <% end %>
         
           <% if an_alert.Friday %>
-            Friday, 
+            Fri
           <% end %>
         
           <% if an_alert.Saturday %>
-            Saturday
+            Sat
           <% end %>
 
         </td>

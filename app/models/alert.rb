@@ -25,6 +25,7 @@
 class Alert < ApplicationRecord
   belongs_to(:user)
 
+
   def current_hourly_forecast
     # Looks up the hourly weather for a location and returns all results
     url = "https://api.openweathermap.org/data/2.5/onecall?lat=" + self.latitude.to_s + "&lon=" + self.longitude.to_s + "&exclude=current,minutely,daily&units=imperial&appid=" + ENV.fetch("OPEN_WEATHER_KEY")
@@ -122,5 +123,13 @@ class Alert < ApplicationRecord
     self.forecast_start_time = forecast_start_date
     self.forecast_end_time = forecast_end_date
     self.alert_sent = false
+  end
+
+  def no_days_selected?
+    if self.Sunday == false && self.Monday == false && self.Tuesday == false && self.Wednesday == false && self.Thursday == false && self.Friday == false && self.Saturday == false
+      return true
+    else
+      return false
+    end
   end
 end
