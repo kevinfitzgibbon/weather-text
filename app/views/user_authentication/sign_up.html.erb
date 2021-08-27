@@ -1,0 +1,41 @@
+<h1>Sign up</h1>
+
+<form action="/insert_user" method="post">
+
+  <div>
+    <label for="email_box">Email</label>
+    <input id="email_box" name="query_email" placeholder="Choose an email..." type="text">
+  </div>
+  
+  <div>
+  
+    <label for="phone_number_box">Phone number</label>
+      
+    <input type="text" id="phone_number_box" placeholder="Enter your phone number..." name="query_phone_number">
+  </div>
+    
+  <div>
+    <label for="password_box">Password</label>
+    <input id="password_box" name="query_password" placeholder="Choose a password..." type="password">
+  </div>
+
+  <div>
+    <label for="password_confirmation_box">Password Confirmation</label>
+    <input id="password_confirmation_box" name="query_password_confirmation" placeholder="Confirm your password..." type="password">
+  </div>
+
+  <div>
+    Time Zone <%= time_zone_select("query_time_zone", 'time_zone', ActiveSupport::TimeZone.us_zones, default: "Central Time (US & Canada)") %>
+  </div>
+
+
+  <button>
+    Sign up
+  </button>
+</form>
+
+<hr>
+
+<p>
+  Or, <a href="/user_sign_in">Sign in</a> instead.
+</p>

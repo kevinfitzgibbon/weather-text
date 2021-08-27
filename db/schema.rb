@@ -10,6 +10,38 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 0) do
+ActiveRecord::Schema.define(version: 2021_08_22_234003) do
+
+  create_table "alerts", force: :cascade do |t|
+    t.integer "user_id"
+    t.string "address"
+    t.float "latitude"
+    t.float "longitude"
+    t.boolean "Sunday"
+    t.boolean "Monday"
+    t.boolean "Tuesday"
+    t.boolean "Wednesday"
+    t.boolean "Thursday"
+    t.boolean "Friday"
+    t.boolean "Saturday"
+    t.boolean "alert_sent"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "time_zone"
+    t.datetime "alert_send_time"
+    t.datetime "forecast_start_time"
+    t.datetime "forecast_end_time"
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.string "email"
+    t.string "password_digest"
+    t.string "phone_number"
+    t.boolean "phone_confirmed"
+    t.boolean "mail_confirmed"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "time_zone"
+  end
 
 end

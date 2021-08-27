@@ -1,0 +1,39 @@
+<div >
+  <h5>
+    Edit User Account
+  </h5>
+
+  <div>
+    <form action="/modify_user" method="post">
+      <div>
+        <label for="email_box">Email</label>
+        <input id="email_box" name="query_email" value="<%= @current_user.email %>">
+      </div>
+      <div>
+        <label for="phone_number_box">Phone number</label>
+        <input id="phone_number_box" name="query_phone_number" value="<%= Phone.new(@current_user.phone_number).display %>">
+      </div>
+
+      <div>
+        Time Zone <%= time_zone_select("query_time_zone", 'time_zone', ActiveSupport::TimeZone.us_zones, default: @current_user.time_zone) %>
+      </div>
+
+      <div>
+        <label for="password_box">Password</label>
+        <input id="password_box" name="query_password" placeholder="Choose a password..." type="password">
+      </div>
+    
+      <div>
+        <label for="password_confirmation_box">Password Confirmation</label>
+        <input id="password_confirmation_box" name="query_password_confirmation" placeholder="Confirm your password..." type="password">
+      </div>
+
+      <button>
+        Update account
+      </button>
+    </form>
+    <hr>
+    <div><a href = "/cancel_user_account">Delete Account</a></div>
+    <b>This will delete all of your existing alerts and cannot be undone</b>
+  </div>
+</div>
