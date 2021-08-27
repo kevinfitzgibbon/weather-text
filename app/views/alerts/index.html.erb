@@ -1,7 +1,7 @@
 <div>
   <div>
     <h1>
-      List of <%= @current_user.email %>'s alerts
+      <%= @current_user.email %>'s alerts
     </h1>
   </div>
 </div>
@@ -10,9 +10,9 @@
 
 <div>
   <div>
-    <h2>
-      Add a new alert
-    </h2>
+    <h4>
+      Create a New Rain Alert
+    </h4>
 
     <form action="/insert_alert" method="post">
       <div>
@@ -114,6 +114,7 @@
 </div>
 
 <hr>
+<h4><%= @current_user.email %>'s Alerts</h4>
 <div>
   <div>
     <table class="table">
