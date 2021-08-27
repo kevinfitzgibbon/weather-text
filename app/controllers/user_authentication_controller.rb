@@ -37,44 +37,62 @@ class UserAuthenticationController < ApplicationController
   end
 
   def create
-    @user = User.new
-    @user.email = params.fetch("query_email")
-    @user.password = params.fetch("query_password")
-    @user.password_confirmation = params.fetch("query_password_confirmation")
-    @user.phone_number = params.fetch("query_phone_number")
-    @user.phone_confirmed = false
-    @user.mail_confirmed = false
-    @user.time_zone = params.fetch("query_time_zone").fetch("time_zone")
 
-    save_status = @user.save
+    # Check Phone Number Validity
+    phone_number = params.fetch("query_phone_number")
+    if Phonelib.valid?(phone_number)
+      phone_number = Phonelib.parse(phone_number).full_e164
 
-    if save_status == true
-      session[:user_id] = @user.id
-   
-      redirect_to("/", { :notice => "User account created successfully."})
+      @user = User.new
+      @user.email = params.fetch("query_email")
+      @user.password = params.fetch("query_password")
+      @user.password_confirmation = params.fetch("query_password_confirmation")
+      @user.phone_number = phone_number
+      @user.phone_confirmed = false
+      @user.mail_confirmed = false
+      @user.time_zone = params.fetch("query_time_zone").fetch("time_zone")
+
+      save_status = @user.save
+
+      if save_status == true
+        session[:user_id] = @user.id
+    
+        redirect_to("/", { :notice => "User account created successfully."})
+      else
+        redirect_to("/user_sign_up", { :alert => "User account failed to create successfully."})
+      end
     else
-      redirect_to("/user_sign_up", { :alert => "User account failed to create successfully."})
+      redirect_to("/user_sign_up", { :alert => "Please enter a valid phone number."})
     end
   end
-    
+
   def edit_profile_form
     render({ :template => "user_authentication/edit_profile.html.erb" })
   end
 
   def update
-    @user = @current_user
-    @user.email = params.fetch("query_email")
-    @user.password = params.fetch("query_password")
-    @user.password_confirmation = params.fetch("query_password_confirmation")
-    @user.phone_number = params.fetch("query_phone_number")
-    @user.time_zone = params.fetch("query_time_zone").fetch("time_zone")
-    
-    if @user.valid?
-      @user.save
 
-      redirect_to("/", { :notice => "User account updated successfully."})
+    # Check Phone Number Validity
+    phone_number = params.fetch("query_phone_number")
+    if Phonelib.valid?(phone_number)
+      phone_number = Phonelib.parse(phone_number).full_e164
+
+      @user = @current_user
+      @user.email = params.fetch("query_email")
+      @user.password = params.fetch("query_password")
+      @user.password_confirmation = params.fetch("query_password_confirmation")
+      @user.phone_number = phone_number
+      @user.time_zone = params.fetch("query_time_zone").fetch("time_zone")
+
+      if @user.valid?
+        @user.save
+  
+        redirect_to("/edit_user_profile", { :notice => "User account updated successfully."})
+      else
+        render({ :template => "user_authentication/edit_profile_with_errors.html.erb" })
+      end  
     else
-      render({ :template => "user_authentication/edit_profile_with_errors.html.erb" })
+      redirect_to("/edit_user_profile", { :alert => "Please enter a valid phone number."})
     end
   end
 
@@ -87,7 +105,7 @@ class UserAuthenticationController < ApplicationController
     @current_user.destroy
     reset_session
     
-    redirect_to("/", { :notice => "User account cancelled" })
+    redirect_to("/", { :notice => "User account deleted" })
   end
  
 end

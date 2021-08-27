@@ -4,12 +4,13 @@
   </h5>
 
   <% if @user.errors.any? %>
-  <% @user.errors.full_messages.each do |message| %>
-    <div class="alert">
-      <%= message %>
-    </div>
+    <% @user.errors.full_messages.each do |message| %>
+      <div class="alert">
+        <%= message %>
+      </div>
+    <% end %>
   <% end %>
-  <% end %>
+
   <div>
     <form action="/modify_user" method="post">
               
@@ -19,7 +20,7 @@
       </div>
       <div>
         <label for="phone_number_box">Phone number</label>
-        <input id="phone_number_box" name="query_phone_number" value="<%= @current_user.phone_number %>">
+        <input id="phone_number_box" name="query_phone_number" value="<%= Phone.new(@current_user.phone_number).display %>">
       </div>
 
       <div>

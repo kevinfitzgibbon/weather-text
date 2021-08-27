@@ -20,7 +20,7 @@
           <b>Location: </b>
         </label>
 
-        <input type="text" id="address_box" name="query_address" required>
+        <input type="text" id="address_box" name="query_address" placeholder="Enter a location..." required>
         <i>For most accurate results, enter an exact address</i>
       </div>
 
@@ -29,7 +29,7 @@
           <b>Alert Time:</b>
         </label>
 
-        <input type="time" id="alert_send_time_box" name="query_alert_send_time" required>
+        <input type="time" id="alert_send_time_box" name="query_alert_send_time" placeholder="7:30 AM" required>
         <i>(in <%= @current_user.time_zone %>)</i>
       </div>
 
@@ -82,13 +82,13 @@
           <b>Forecast Time:</b> from
         </label>
 
-        <input type="time" id="forecast_start_time_box" name="query_forecast_start_time" required>
+        <input type="time" id="forecast_start_time_box" name="query_forecast_start_time" placeholder="8:00 AM" required>
 
                <label for="forecast_end_time_box">
           to
         </label>
 
-        <input type="time" id="forecast_end_time_box" name="query_forecast_end_time" required>
+        <input type="time" id="forecast_end_time_box" name="query_forecast_end_time" placeholder="6:00 PM" required>
         <i>(in <%= @current_user.time_zone %>)</i>
       </div>
 
@@ -100,10 +100,14 @@
       </button>
     </form>
       <div>
-        <p>You will receive a text notification at <b><%= @current_user.phone_number %></b> at the <b>Alert Time</b> on the <b>Alert Days</b> if the weather forecast for the <b>Location</b> calls for rain during the <b>Forecast Time</b> period.
-        <p>All times are in <b><%= @current_user.time_zone %></b>, based on your profile preferences.
-        <p>If the <b>Alert Time</b> is before the <b>Forecast Start Time</b>, then the <b>Forecast Start Time</b> is on the following day.
-        <p>If the <b>Forecast Start Time</b> is before the <b>Forecast End Time</b>, then the <b>Forecast End Time</b> is on the following day. 
+        <hr>
+        <b>Notes</b>:
+        <ul>
+          <li>You will receive a text notification at <b><%= Phone.new(@current_user.phone_number).display %></b> at the <b>Alert Time</b> on the <b>Alert Days</b> if the weather forecast for the <b>Location</b> calls for rain during the <b>Forecast Time</b> period.</li>
+          <li>All times are in <b><%= @current_user.time_zone %></b>, based on your profile preferences.</li>
+          <li>If the <b>Alert Time</b> is before the <b>Forecast Start Time</b>, then the <b>Forecast Start Time</b> is on the following day.</li>
+          <li>If the <b>Forecast End Time</b> is before the <b>Forecast Start Time</b>, then the <b>Forecast End Time</b> is on the following day.</li> 
+        </ul>
       </div>
 
   </div>
@@ -112,40 +116,28 @@
 <hr>
 <div>
   <div>
-    <table>
-      <tr>
-        <th>
-          Address
-        </th>
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">
+            Address
+          </th>
 
-        <th>
-          Days
-        </th>
+          <th scope="col">
+            Alert Send Time
+          </th>
 
-        <th>
-          Alert Send Time
-        </th>
+          <th scope="col">
+            Forecast Time
+          </th>
 
-        <th>
-          Forecast Start Time
-        </th>
+          <th scope="col">
+          </th>
 
-        <th>
-          Forecast End Time
-        </th>
-
-        <th>
-          Created at
-        </th>
-
-        <th>
-          Updated at
-        </th>
-
-        <th>
-        </th>
-      </tr>
-
+          <th scope="col">
+          </th>
+        </tr>
+      </thead>
       <% @list_of_alerts.each do |an_alert| %>
       <tr>
         <td>
@@ -153,7 +145,9 @@
         </td>
 
         <td>
-        
+
+          <%= an_alert.alert_send_time.in_time_zone(@current_user.time_zone).strftime(" %l:%M %p %Z")  %>
+          on
           <% if an_alert.Sunday %>
             Sun
           <% end %>
@@ -185,27 +179,20 @@
         </td>
 
         <td>
-          <%= an_alert.alert_send_time.in_time_zone(@current_user.time_zone).strftime(" %l:%M %p %Z")  %>
-        </td>
-
-        <td>
-          <%= an_alert.forecast_start_time.in_time_zone(@current_user.time_zone).strftime(" %l:%M %p %Z") %>
-        </td>
-
-        <td>
+          <%= an_alert.forecast_start_time.in_time_zone(@current_user.time_zone).strftime(" %l:%M %p") %>
+          to
           <%= an_alert.forecast_end_time.in_time_zone(@current_user.time_zone).strftime(" %l:%M %p %Z") %>
         </td>
 
         <td>
-          <%= time_ago_in_words(an_alert.created_at) %> ago
-        </td>
-        <td>
-          <%= time_ago_in_words(an_alert.updated_at) %> ago
+          <a href="/alerts/<%= an_alert.id %>">
+            Details
+          </a>
         </td>
 
         <td>
-          <a href="/alerts/<%= an_alert.id %>">
-            Show details
+          <a href="/delete_alert/<%= an_alert.id %>">
+            <b class="text-danger"><i class="far fa-fw fa-trash-alt"></i></b>
           </a>
         </td>
       </tr>
