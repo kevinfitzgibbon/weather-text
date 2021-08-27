@@ -14,8 +14,11 @@
 #
 class User < ApplicationRecord
   validates :email, :uniqueness => { :case_sensitive => false }
+  validates :email,  format: { with: /(.+)@(.+)/, notice: "Email invalid" }
+  validates :email, length: { minimum: 4, maximum: 254 }
   validates :email, :presence => true
   validates :phone_number, :presence => true
   has_secure_password
   has_many(:alerts)
+            
 end

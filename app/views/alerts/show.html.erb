@@ -3,48 +3,17 @@
     <h1>
       <%= @the_alert.address %> Alert Details
     </h1>
-
-    <div>
-      <div>
-        <a href="/alerts">
-          Go back
-        </a>
-      </div>
-
-      <div>
-        <a href="/delete_alert/<%= @the_alert.id %>">
-          Delete alert
-        </a>
-      </div>
-    </div>
+    <h5>
+      Created <%= time_ago_in_words(@the_alert.created_at) %> ago by <%= @the_alert.user.email%>, updated <%= time_ago_in_words(@the_alert.updated_at) %> ago
+    </h5>
 
     <dl>
-
       <dt>
-        Address
-      </dt>
-      <dd>
-        <%= @the_alert.address %>
-      </dd>
-
-      <dt>
-        Latitude
-      </dt>
-      <dd>
-        <%= @the_alert.latitude %>
-      </dd>
-
-      <dt>
-        Longitude
-      </dt>
-      <dd>
-        <%= @the_alert.longitude %>
-      </dd>
-
-      <dt>
-        Days
+        Alerts Sent At
       </dt>
       <dd>        
+        <%= @the_alert.alert_send_time.in_time_zone(@current_user.time_zone).strftime(" %l:%M %p %Z") %> on
+
         <% if @the_alert.Sunday %>
           Sun
         <% end %>
@@ -75,38 +44,119 @@
       </dd>
 
       <dt>
-        Alert send time
+        Address
       </dt>
       <dd>
-        <%= @the_alert.alert_send_time.in_time_zone(@current_user.time_zone).strftime(" %l:%M %p %Z") %>
+        <%= @the_alert.address %>
       </dd>
+    </dl>
+
+    
+    <div>
+      <div id="map" style='width: 800px; height: 400px;'></div>
+    </div>
+
+    <script>
+      function initMap() {
+        var mapDiv = document.getElementById('map');
+
+        var map = new google.maps.Map(mapDiv);
+
+        var bounds = new google.maps.LatLngBounds();
+        
+        var infowindow = new google.maps.InfoWindow({
+          content: "<%= @the_alert.address %>" 
+        });
+        
+        var marker = new google.maps.Marker({
+          position: {lat: <%= @the_alert.latitude %>, lng: <%= @the_alert.longitude %>}, 
+          map: map,
+          title: '<%= @the_alert.address %>',
+          icon: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png' 
+        });
+        
+        marker.addListener('click', function() {
+          infowindow.open(map, marker);
+        });
+
+      bounds.extend(new google.maps.LatLng(<%= @the_alert.latitude %>, <%= @the_alert.longitude %> ));
+
+      map.fitBounds(bounds);
+      };
+      
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=<%= ENV.fetch("GOOGLE_MAPS_KEY") %>&callback=initMap"
+    async defer></script>
 
       <dt>
-        Forecast start time
+        Alert Forecast Period
       </dt>
       <dd>
-        <%= @the_alert.forecast_start_time.in_time_zone(@current_user.time_zone).strftime(" %l:%M %p %Z") %>
-      </dd>
-
-      <dt>
-        Forecast end time
-      </dt>
-      <dd>
+        <%= @the_alert.forecast_start_time.in_time_zone(@current_user.time_zone).strftime(" %l:%M %p") %>
+        to
         <%= @the_alert.forecast_end_time.in_time_zone(@current_user.time_zone).strftime(" %l:%M %p %Z") %>
       </dd>
 
       <dt>
-        Created at
+        Current 48 Hour Forecast
       </dt>
       <dd>
-        <%= time_ago_in_words(@the_alert.created_at) %> ago
-      </dd>
+        <div>
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">
+                  DateTime
+                </th>
 
-      <dt>
-        Updated at
-      </dt>
-      <dd>
-        <%= time_ago_in_words(@the_alert.updated_at) %> ago
+                <th scope="col">
+                  Forecast
+                </th>
+
+                <th scope="col">
+                  Description
+                </th>
+
+                <th scope="col">
+                  Temperature
+                </th>
+
+                <th scope="col">
+                  Probability of Precipitation
+                </th>
+                
+                <th scope="col">
+                  Rain Intensity
+                </th>
+              </tr>
+            </thead>
+            <% @the_alert.current_hourly_forecast.each do |hour| %>
+              <tr>
+                <td>
+                  <%= DateTime.strptime(hour.fetch("dt").to_s,'%s').in_time_zone(@current_user.time_zone).strftime("%-d %b %Y, %-l:%M %P %Z") %>
+                </td>
+                <td>
+                  <%= hour.fetch("weather").first.fetch("main") %>
+                </td>
+                <td>
+                  <%= hour.fetch("weather").first.fetch("description") %>
+                </td>
+                <td>
+                  <%= hour.fetch("temp").round %> &#176; F
+                </td>
+                <td>
+                  <%= (hour.fetch("pop")*100).round %>%
+                </td>
+                <td>
+                  <% if hour.fetch("weather").first.fetch("main") == "Rain" %>
+                    <%= hour.fetch("rain").fetch("1h") %> mm/h
+                  <% else %>
+                    N/A
+                  <% end %>
+                </td>
+            <% end %>
+          </table>
+        </div>
       </dd>
     </dl>
   </div>
@@ -124,12 +174,23 @@
     <form action="/modify_alert/<%= @the_alert.id %>"  method="post" >
       <div>
         <label for="address_box">
-          Address
+          <b>Location:</b>
         </label>
 
-        <input type="text" id="address_box" name="query_address" value="<%= @the_alert.address %>" required>
+        <input type="text" id="address_box" name="query_address" value="<%= @the_alert.address %>" placeholder="Enter a location..." required>
+        <i>For most accurate results, enter an exact address</i>
       </div>
 
+      <div>
+        <label for="alert_send_time_box">
+          <b>Alert Time:</b>
+        </label>
+
+        <input type="time" id="alert_send_time_box" name="query_alert_send_time" value="<%= @the_alert.alert_send_time.strftime("%H:%M")  %>" placeholder="7:30 AM" required>
+        <i>(in <%= @current_user.time_zone %>)</i>
+      </div>
+
+      <b>Alert Days:</b>
       <div class="form-check form-check-inline">
         <input type="checkbox" id="Sunday_box" name="query_Sunday" value="1" <%= "checked" if @the_alert.Sunday %>>
 
@@ -187,34 +248,44 @@
       </div>
 
       <div>
-        <label for="alert_send_time_box">
-          Alert send time
-        </label>
-
-        <input type="time" id="alert_send_time_box" name="query_alert_send_time" value="<%= @the_alert.alert_send_time.strftime("%H:%M")  %>" required>
-      </div>
-
-      <div>
         <label for="forecast_start_time_box">
-          Forecast start time
+          <b>Forecast Time:</b> from
         </label>
 
-        <input type="time" id="forecast_start_time_box" name="query_forecast_start_time" value="<%= @the_alert.forecast_start_time.strftime("%H:%M")  %>" required>
-      </div>
+        <input type="time" id="forecast_start_time_box" name="query_forecast_start_time" value="<%= @the_alert.forecast_start_time.strftime("%H:%M")  %>" placeholder="8:00 AM" required>
 
-      <div>
-        <label for="forecast_end_time_box">
-          Forecast end time
+               <label for="forecast_end_time_box">
+          to
         </label>
 
-        <input type="time" id="forecast_end_time_box" name="query_forecast_end_time" value="<%= @the_alert.forecast_end_time.strftime("%H:%M")  %>" required>
+        <input type="time" id="forecast_end_time_box" name="query_forecast_end_time" value="<%= @the_alert.forecast_end_time.strftime("%H:%M")  %>"placeholder="6:00 PM" required>
+        <i>(in <%= @current_user.time_zone %>)</i>
       </div>
 
       <button>
         Update alert
       </button>
     </form>
+    <div>
+      <div>
+        <a href="/delete_alert/<%= @the_alert.id %>">
+          Delete alert
+        </a>
+      </div>
+    </div>
+    <div>
+      <hr>
+      <h4>Notes</h4>
+      <ul>
+        <li>You will receive a text notification at <b><%= Phone.new(@current_user.phone_number).display %></b> at the <b>Alert Time</b> on the <b>Alert Days</b> if the weather forecast for the <b>Location</b> calls for rain during the <b>Forecast Time</b> period.</li>
+        <li>All times are in <b><%= @current_user.time_zone %></b>, based on your profile preferences.</li>
+        <li>If the <b>Alert Time</b> is before the <b>Forecast Start Time</b>, then the <b>Forecast Start Time</b> is on the following day.</li>
+        <li>If the <b>Forecast End Time</b> is before the <b>Forecast Start Time</b>, then the <b>Forecast End Time</b> is on the following day.</li> 
+      </ul>
+    </div>
+
   </div>
 </div>
+
 
 <hr>

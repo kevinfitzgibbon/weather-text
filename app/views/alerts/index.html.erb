@@ -101,7 +101,7 @@
     </form>
       <div>
         <hr>
-        <b>Notes</b>:
+        <h4>Notes</h4>
         <ul>
           <li>You will receive a text notification at <b><%= Phone.new(@current_user.phone_number).display %></b> at the <b>Alert Time</b> on the <b>Alert Days</b> if the weather forecast for the <b>Location</b> calls for rain during the <b>Forecast Time</b> period.</li>
           <li>All times are in <b><%= @current_user.time_zone %></b>, based on your profile preferences.</li>
@@ -132,9 +132,11 @@
           </th>
 
           <th scope="col">
+            Details
           </th>
 
           <th scope="col">
+            Delete
           </th>
         </tr>
       </thead>

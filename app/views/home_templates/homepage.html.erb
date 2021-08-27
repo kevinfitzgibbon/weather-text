@@ -1,5 +1,15 @@
+<h1>Welcome to WeatherTexter!</h1>
+<hr>
 <% if @current_user == nil %>
-  Hello! Please Sign In or Sign Up to continue
+  Please <a href="/user_sign_in">Sign In</a> or <a href="/user_sign_up">Sign Up</a> to continue
 <% else %>
   Hello <%= @current_user.email %>!
+  <p><a href="/alerts">My Alerts</a>
 <% end %>
+<hr>
+<b>WeatherTexter</b> is an application designed to create customizable weekly weather alerts that are automatically sent to your phone by text message if conditions are fulfilled.
+<p>
+<p>
+For example, let's say you often forget to grab a raincoat in the morning before leaving for work and end up getting soaked in the rain.
+This application will allow you to create an alert that texts you on weekday mornings if the forecast calls for rain in your city during your commuting hours.
+If rain is not in the forecast, we won't bother you.
